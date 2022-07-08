@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.iron.mapper.CaseManageMapper">
+  <resultMap id="BaseResultMap" type="com.example.iron.pojo.CaseManageDO">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="req_method" jdbcType="VARCHAR" property="reqMethod" />
+    <result column="req_header" jdbcType="VARCHAR" property="reqHeader" />
+    <result column="content_type" jdbcType="VARCHAR" property="contentType" />
+    <result column="req_param" jdbcType="VARCHAR" property="reqParam" />
+    <result column="json_temp" jdbcType="VARCHAR" property="jsonTemp" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_path" jdbcType="VARCHAR" property="filePath" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="is_available" jdbcType="VARCHAR" property="isAvailble" />
+    <result column="create_time" jdbcType="TIME" property="createTime" />
+    <result column="update_time" jdbcType="TIME" property="updateTime" />
+  </resultMap>
+  <insert id="insert" parameterType="com.example.iron.pojo.CaseManageDO">
+    insert into case_manage ( url, req_Method, req_header, content_type, req_param,
+      json_temp, file_name, file_path,  create_user, is_available, create_time, update_time
+      )
+    values (#{url,jdbcType=VARCHAR}, #{reqMethod,jdbcType=VARCHAR}, #{reqHeader,jdbcType=VARCHAR},#{contentType,jdbcType=VARCHAR},
+    #{reqParam,jdbcType=VARCHAR},#{jsonTemp,jdbcType=VARCHAR},  #{fileName,jdbcType=VARCHAR},#{filePath,jdbcType=VARCHAR},
+     #{createUser,jdbcType=VARCHAR}, #{isAvailble,jdbcType=VARCHAR},DATE_FORMAT(now(),'%y-%m-%d %h:%i:%s'), DATE_FORMAT(now(),'%y-%m-%d %h:%i:%s')
+      )
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, url, req_Method, req_header, content_type, req_param,
+    json_temp, file_name, file_path,  create_user, is_available, create_time, update_time
+    from case_manage
+    limit #{pageOn},#{pageSize}
+  </select>
+
+  <update id="update" parameterType="com.example.iron.pojo.CaseManageDO" >
+    update case_manage
+    <set >
+      <if test="url != null" >
+        url = #{url,jdbcType=DECIMAL},
+      </if>
+      <if test="reqMethod != null" >
+        req_Method = #{reqMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="reqHeader != null" >
+        req_header = #{reqHeader,jdbcType=VARCHAR},
+      </if>
+      <if test="contentType != null" >
+        content_type = #{contentType,jdbcType=VARCHAR},
+      </if>
+      <if test="reqParam != null" >
+        req_param = #{reqParam,jdbcType=VARCHAR},
+      </if>
+      <if test="jsonTemp != null" >
+        json_temp = #{jsonTemp,jdbcType=VARCHAR},
+      </if>
+        update_time=DATE_FORMAT(now(),%y-%m-%d %h:%i:%s)
+    </set>
+    where id = #{caseId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectCaseById" resultMap="BaseResultMap">
+    select id, url, req_Method, req_header, content_type, req_param,
+    json_temp, file_name, file_path,  create_user, is_available, create_time, update_time
+    from case_manage
+   where id = #{caseId,jdbcType=INTEGER}
+  </select>
+  <update id="discardCaseById" >
+    update case_manage
+    <set >
+      is_available = 0
+    </set>
+    where id = #{caseId,jdbcType=INTEGER}
+  </update>
+</mapper>
